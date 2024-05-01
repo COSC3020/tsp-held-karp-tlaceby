@@ -44,6 +44,26 @@ Test your new function; I've provided some basic testing code in `code.test.js`.
 
 ## Runtime Analysis
 
-What is the worst-case asymptotic time complexity of your implementation? What
-is the worst-case asymptotic memory complexity? Add your answer, including your
-reasoning, to this markdown file.
+The overall worst-case time complexity of my `heldKarp()` function is determined by recursively exploring each subset of cities and the loop through each unvisited city. Since I am using memoization to avoid repeated work, the work for generating the possible combinations is $2^n$. 
+
+```js
+// go through each unvisited city
+for (const city of cities) {
+  // ...
+  const tourLength = heldKarp(newCities, city) + distances[start][city];
+  // ...
+}
+```
+Within each recursive call, we also loop through each unvisited city. This loop contributes a factor of $n$ iterations in the worst case. 
+
+```js
+// Attempt with each city as a start.
+for (let start = 0; start < n; start++) {
+  const cities = new Set([...Array(n).keys()].filter((c) => c !== start));
+  const tourLength = heldKarp(cities, start);
+  
+  minTourLength = Math.min(minTourLength, tourLength);
+}
+```
+
+We then find the shortest tour starting with each city. This is a total of $n$ iterations. However since we know the `heldKarp()` function will perform in $\Theta(n \cdot 2^n)$ in the worst-case and `helkKarp()` runs a total of $n$ times for each city, the overall worst-case complexity is $\Theta(n^2 \cdot 2^n)$.
