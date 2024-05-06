@@ -1,3 +1,5 @@
+[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-24ddc0f5d75046c5622901739e7c5dd533143b0c8e959d652212380cedb1ea36.svg)](https://classroom.github.com/a/KdVea3AG)
+
 # Traveling Salesperson Problem -- Held-Karp Algorithm
 
 This exercise is about the Traveling Salesperson Problem I mentioned in the
@@ -5,7 +7,7 @@ lecture on NP-hard problems -- given a set of cities, determine the length of
 the shortest tour that visits all of them. We can get from any city to any other
 city, i.e. the graph of cities is completely connected. We consider the version
 of the Traveling Salesperson Problem that finds the shortest tour to visit $n$
-cities, starting at a city and ending at the $n$ th city; it *does not* go
+cities, starting at a city and ending at the $n$ th city; it _does not_ go
 back to the start. The start city may be any of the cities. Remember that the
 graph for a TSP is undirected, i.e. the cost is the same in either direction.
 
@@ -43,6 +45,32 @@ Test your new function; I've provided some basic testing code in `code.test.js`.
 
 ## Runtime Analysis
 
-What is the worst-case asymptotic time complexity of your implementation? What
-is the worst-case asymptotic memory complexity? Add your answer, including your
-reasoning, to this markdown file.
+The overall worst-case time complexity of my `heldKarp()` function is determined by recursively exploring each subset of cities and the loop through each unvisited city. Since I am using memoization to avoid repeated work, the work for generating the possible combinations is $2^n$.
+
+```js
+// go through each unvisited city
+for (const city of cities) {
+  // ...
+  const tourLength = heldKarp(newCities, city) + distances[start][city];
+  // ...
+}
+```
+
+Within each recursive call, we also loop through each unvisited city. This loop contributes a factor of $n$ iterations in the worst case.
+
+```js
+// Attempt with each city as a start.
+for (let start = 0; start < n; start++) {
+  const cities = new Set([...Array(n).keys()].filter((c) => c !== start));
+  const tourLength = heldKarp(cities, start);
+
+  minTourLength = Math.min(minTourLength, tourLength);
+}
+```
+
+We then find the shortest tour starting with each city. This is a total of $n$ iterations. However since we know the `heldKarp()` function will perform in $\Theta(n \cdot 2^n)$ in the worst-case and `helkKarp()` runs a total of $n$ times for each city, the overall worst-case complexity is $\Theta(n^2 \cdot 2^n)$.
+
+## Resources
+
+- https://youtu.be/cY4HiiFHO1o?si=Sp3AkVJNAz4Rzi2T
+- Also for start with the psudocode https://en.wikipedia.org/wiki/Held%E2%80%93Karp_algorithm#Example.5B4.5D

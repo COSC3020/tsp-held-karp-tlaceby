@@ -1,7 +1,5 @@
-const fs = require('fs');
+const { tsp_hk } = require("./code");
 const assert = require('assert');
-
-eval(fs.readFileSync('code.js')+'');
 
 dm = [[]];
 assert(tsp_hk(dm) == 0);
